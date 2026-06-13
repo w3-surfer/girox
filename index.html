@@ -286,6 +286,35 @@
   .rodape-base .mini-marca small{display:block;font-family:'Archivo',Arial,sans-serif;font-weight:600;font-size:.72rem;color:var(--amarelo);letter-spacing:.3px}
   .rodape-bandeiras{display:flex;gap:10px;align-items:center}
   .rodape-bandeiras .cartao-icone{width:64px;height:41px;border:none}
+
+  /* ===== mobile: encaixar os 2 cards (calculadora + resultado) na 1ª tela ===== */
+  @media (max-width:680px){
+    main{padding:12px 0 36px}
+    .grade{gap:12px}
+    .card,.resultado{padding:16px}
+    .grade .card{justify-content:flex-start}
+    .grade .card > label{margin-top:0}
+    .parcelas-grupo{margin-top:12px;margin-bottom:0}
+    .card h3,.resultado .rotulo{font-size:1.05rem;margin-bottom:8px}
+    label{margin-bottom:5px;font-size:.84rem}
+    .campo-valor{padding:6px 8px;gap:8px}
+    #valor{font-size:1.35rem}
+    .passo{width:40px;height:40px;font-size:1.45rem}
+    input[type=range]{margin:10px 0 4px}
+    .faixa-limites{font-size:.72rem}
+    .seletor-parcelas{padding:11px 38px 11px 14px;font-size:.98rem}
+    /* card resultado compacto */
+    .parcela-grande{font-size:1.9rem;margin:2px 0}
+    .resultado .linhas-resultado{margin-top:10px;margin-bottom:12px;gap:5px}
+    .linha-res{padding-top:6px}
+    .linha-res span{font-size:.8rem}
+    .linha-res strong{font-size:.95rem}
+    .resultado .btn-whats{margin-top:12px;padding:11px 14px;font-size:.92rem}
+    .nota-resultado{display:none}
+    /* header e faixa mais baixos p/ sobrar tela aos cards */
+    .faixa-titulo{margin:14px auto 0;padding:9px 22px}
+    .faixa-titulo h2{font-size:1.45rem}
+  }
 </style>
 </head>
 <body>
@@ -566,12 +595,13 @@
   elMais.addEventListener('click', () => passar(1));
 
   // mantém o card da calculadora com a mesma altura do card de resultado
-  // (lado a lado o grid já estica; empilhado, igualamos via min-height)
+  // (lado a lado o grid já estica; só igualamos via min-height na faixa tablet
+  //  empilhada. No celular ≤680px deixamos altura natural p/ os 2 cards caberem na tela)
   const cardCalc = document.querySelector('.grade .card');
   const cardRes  = document.querySelector('.grade .resultado');
   function igualarCards() {
     cardCalc.style.minHeight = '';
-    if (window.matchMedia('(max-width:880px)').matches) {
+    if (window.matchMedia('(min-width:681px) and (max-width:880px)').matches) {
       cardCalc.style.minHeight = cardRes.offsetHeight + 'px';
     }
   }
