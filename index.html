@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GIRO X — Empréstimo no Cartão</title>
+<meta name="description" content="GIRO X — soluções que cabem no seu bolso. Simule seu empréstimo no cartão em 6x ou 12x. Porto Seguro, Eunápolis e Teixeira de Freitas - BA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700;900&family=Saira:ital,wght@0,600;0,700;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --azul:#2056c9;
+    --azul-escuro:#15307e;
+    --azul-claro:#a9c4ee;
+    --vermelho:#e32219;
+    --vermelho-escuro:#bb1810;
+    --amarelo:#a9c8ff;
+    --papel:#f4f6fb;
+    --papel-card:#ffffff;
+    --texto:#2b3a57;
+    --borda:#dde3ee;
+    --sombra:0 10px 30px rgba(21,48,126,.12);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Archivo',Arial,Helvetica,sans-serif;
+    background:var(--papel);
+    color:var(--texto);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .fonte-titulo{font-family:'Archivo Black','Arial Black',Arial,sans-serif}
+
+  .pagina{max-width:1060px;margin:0 auto;padding:0 20px}
+
+  /* ===== header ===== */
+  header{position:relative;padding:26px 0 10px}
+  .topo{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .marca{display:flex;align-items:center;gap:12px;text-align:left}
+  .logo-giro{flex:none}
+  .fonte-logo{
+    font-family:'Saira',Arial,sans-serif;font-style:italic;font-weight:900;
+    font-size:clamp(2rem,5.8vw,3.7rem);
+    line-height:.88;letter-spacing:-1px;
+  }
+  .fonte-logo .t-giro{color:var(--azul-escuro)}
+  .fonte-logo .t-x{color:var(--vermelho)}
+  .slogan{
+    font-family:'Saira',Arial,sans-serif;font-style:italic;font-weight:700;
+    color:var(--azul-escuro);text-transform:uppercase;
+    letter-spacing:.4px;font-size:clamp(.58rem,1.7vw,.84rem);
+    margin-top:3px;opacity:.92;
+  }
+  .bandeiras{display:flex;flex-direction:column;gap:10px}
+
+  .cartao-icone{
+    width:88px;height:56px;border-radius:9px;
+    background:#fff;border:1px solid var(--borda);
+    box-shadow:0 4px 12px rgba(39,73,124,.15);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  @media (max-width:680px){
+    .topo{flex-direction:column}
+    .bandeiras{flex-direction:row}
+    .marca{flex-direction:column;text-align:center}
+    .marca-textos{text-align:center}
+  }
+
+  /* ===== faixa do título ===== */
+  .faixa-titulo{
+    margin:26px auto 0;
+    border:4px solid var(--azul);
+    border-radius:999px;
+    padding:16px 34px;
+    text-align:center;
+    background:var(--papel-card);
+    box-shadow:inset 0 0 0 4px var(--papel-card), inset 0 0 0 7px var(--vermelho), var(--sombra);
+    max-width:780px;
+  }
+  .faixa-titulo h2{
+    color:var(--vermelho);
+    font-family:'Saira',Arial,sans-serif;font-style:italic;font-weight:900;
+    font-size:clamp(1.4rem,4.8vw,2.6rem);
+    letter-spacing:.5px;
+  }
+
+  /* ===== layout principal ===== */
+  main{position:relative;padding:34px 0 50px}
+  .grade{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:stretch}
+  @media (max-width:880px){.grade{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--papel-card);
+    border:1px solid var(--borda);
+    border-radius:18px;
+    box-shadow:var(--sombra);
+    padding:28px;
+    position:relative;
+    display:flex;flex-direction:column;
+  }
+  .card h3{
+    color:var(--azul-escuro);
+    font-size:1.25rem;
+    margin-bottom:18px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  /* título fixo no topo; o restante centraliza no espaço que sobra */
+  .grade .card > label{margin-top:auto}
+  .card h3 .ponto{width:10px;height:10px;border-radius:50%;background:var(--vermelho);display:inline-block;flex:none}
+
+  /* ===== calculadora ===== */
+  label{font-weight:700;font-size:.9rem;color:var(--azul-escuro);display:block;margin-bottom:8px;letter-spacing:.3px}
+  .campo-valor{
+    display:flex;align-items:center;gap:10px;
+    background:#fff;border:2px solid var(--azul-claro);border-radius:12px;
+    padding:8px 10px;
+    transition:border-color .15s;
+  }
+  .campo-valor:focus-within{border-color:var(--azul)}
+  .campo-valor .prefixo{font-weight:900;color:var(--azul);font-size:1.3rem}
+  #valor{
+    border:none;outline:none;width:100%;
+    font-family:'Archivo Black',Arial,sans-serif;
+    font-size:1.6rem;color:var(--azul-escuro);
+    background:transparent;text-align:center;
+  }
+  .passo{
+    flex:none;width:44px;height:44px;border-radius:10px;
+    border:none;background:var(--azul);color:#fff;cursor:pointer;
+    font-family:'Archivo',Arial,sans-serif;font-weight:700;font-size:1.7rem;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:filter .15s,transform .08s;-webkit-user-select:none;user-select:none;
+  }
+  .passo:hover{filter:brightness(1.08)}
+  .passo:active{transform:scale(.92)}
+  .passo:disabled{opacity:.35;cursor:not-allowed}
+  input[type=range]{
+    width:100%;margin:16px 0 6px;accent-color:var(--vermelho);cursor:pointer;
+  }
+  .faixa-limites{display:flex;justify-content:space-between;font-size:.78rem;color:#8b94a6;font-weight:600}
+
+  .parcelas-grupo{margin-top:20px;margin-bottom:auto}
+  .seletor-parcelas{
+    width:100%;
+    border:2px solid var(--azul-claro);
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'%3E%3Cpath d='M1 1l7 7 7-7' fill='none' stroke='%232056c9' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 16px center;
+    border-radius:12px;
+    padding:14px 44px 14px 16px;
+    font-family:'Archivo Black',Arial,sans-serif;
+    font-size:1.1rem;color:var(--azul-escuro);
+    cursor:pointer;outline:none;
+    appearance:none;-webkit-appearance:none;
+    transition:border-color .15s;
+  }
+  .seletor-parcelas:focus{border-color:var(--azul)}
+
+  /* ===== resultado ===== */
+  .resultado{
+    background:linear-gradient(160deg,var(--azul) 0%,var(--azul-escuro) 100%);
+    color:#fff;border-radius:18px;
+    padding:28px;position:relative;overflow:hidden;
+    box-shadow:0 14px 34px rgba(39,73,124,.35);
+    display:flex;flex-direction:column;
+  }
+  .resultado .btn-whats{margin-top:auto}
+  .resultado .linhas-resultado{margin-bottom:24px}
+  .resultado::after{
+    content:"";position:absolute;right:-60px;top:-60px;
+    width:200px;height:200px;border-radius:50%;
+    background:rgba(255,255,255,.07);
+  }
+  .resultado .rotulo{
+    font-family:'Archivo Black','Arial Black',Arial,sans-serif;
+    font-size:1.25rem;
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .parcela-grande{
+    font-family:'Archivo Black',Arial,sans-serif;
+    font-size:clamp(2rem,6vw,3rem);
+    margin:6px 0 2px;
+  }
+  .parcela-grande .x{color:var(--amarelo);font-size:.6em;margin-right:6px}
+  .linhas-resultado{margin-top:20px;display:grid;gap:10px}
+  .linha-res{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid rgba(255,255,255,.22);padding-top:10px;gap:12px;
+  }
+  .linha-res span{font-size:.88rem;opacity:.85}
+  .linha-res strong{font-size:1.05rem;white-space:nowrap}
+  .btn-whats{
+    margin-top:24px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    background:#25d366;color:#fff;text-decoration:none;
+    font-weight:900;font-size:1rem;
+    border-radius:12px;padding:15px 18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
+    transition:transform .15s,filter .15s;
+  }
+  .btn-whats:hover{transform:translateY(-2px);filter:brightness(1.05)}
+  .nota-resultado{margin-top:14px;font-size:.75rem;opacity:.7;text-align:center}
+
+  /* ===== tabela ===== */
+  .secao-tabela{margin-top:34px}
+  .tabela-wrap{overflow-x:auto;border-radius:14px;border:1px solid var(--borda);background:var(--papel-card);box-shadow:var(--sombra)}
+  table{width:100%;border-collapse:collapse;min-width:430px;table-layout:fixed}
+  thead th{
+    background:var(--azul);color:#fff;
+    padding:13px 16px;font-size:.8rem;letter-spacing:1px;text-transform:uppercase;
+    text-align:center;width:33.33%;
+  }
+  tbody td{
+    padding:11px 16px;text-align:center;
+    font-weight:700;color:var(--texto);
+    border-top:1px solid #eef1f7;
+    font-size:.97rem;white-space:nowrap;
+  }
+  tbody td:first-child{color:var(--vermelho);font-family:'Archivo Black',Arial,sans-serif;font-weight:400}
+  tbody tr{cursor:pointer;transition:background .12s}
+  tbody tr:hover{background:#eef4fc}
+  /* par "NX + valor" com larguras fixas: os X ficam alinhados entre si
+     e os valores das parcelas também, em todas as linhas */
+  .par{display:inline-flex;align-items:baseline;gap:8px}
+  .par .vezes-tag{color:var(--azul);font-size:.78rem;font-weight:900;width:2.6em;text-align:right;flex:none}
+  .par .par-valor{width:7.2em;text-align:left;flex:none}
+
+  /* ===== rodapé ===== */
+  footer{
+    margin-top:30px;
+    background:linear-gradient(160deg,var(--azul-escuro),#0e2150);
+    color:#fff;padding:46px 0 28px;position:relative;overflow:hidden;
+  }
+  .rodape-grade{display:grid;gap:16px}
+  .loja{
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:14px;padding:22px 24px;text-align:center;
+  }
+  .loja h4{
+    font-family:'Archivo Black',Arial,sans-serif;
+    color:var(--amarelo);font-size:1.05rem;letter-spacing:1px;margin-bottom:8px;
+  }
+  .loja p{font-size:.92rem;line-height:1.55;opacity:.92}
+  .loja a{
+    color:#fff;text-decoration:none;font-weight:900;
+    display:inline-flex;align-items:center;gap:8px;margin-top:10px;
+    background:#25d366;border-radius:999px;padding:8px 16px;font-size:.88rem;
+    transition:transform .15s;
+  }
+  .loja a:hover{transform:translateY(-2px)}
+  .loja-principal{grid-column:1/-1}
+  .lojas-secundarias{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:680px){.lojas-secundarias{grid-template-columns:1fr}}
+  .rodape-base{
+    margin-top:26px;padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .rodape-base .mini-marca{
+    font-family:'Saira',Arial,sans-serif;font-style:italic;font-weight:900;font-size:1.4rem;letter-spacing:-.5px;
+  }
+  .rodape-base .mini-marca .t-giro{color:#fff}
+  .rodape-base .mini-marca .t-x{color:var(--vermelho)}
+  .rodape-base .mini-marca small{display:block;font-family:'Archivo',Arial,sans-serif;font-weight:600;font-size:.72rem;color:var(--amarelo);letter-spacing:.3px}
+  .rodape-bandeiras{display:flex;gap:10px;align-items:center}
+  .rodape-bandeiras .cartao-icone{width:64px;height:41px;border:none}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pagina">
+    <div class="topo">
+      <!-- VISA -->
+      <div class="cartao-icone" title="Aceitamos VISA" aria-label="VISA">
+        <svg width="62" height="22" viewBox="0 0 1000 324" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <path d="M433 318h-81L403 6h81zM726 14a200 200 0 00-72-13c-80 0-136 42-137 103-1 45 40 70 71 85s42 25 42 38c0 21-25 30-48 30a160 160 0 01-76-17l-10-5-11 66c19 8 53 16 89 16 85 0 140-41 141-106 0-36-21-63-68-85-28-15-46-24-46-39 0-13 15-27 47-27a143 143 0 0162 12l7 4zM833 6h-62c-19 0-34 5-42 25L609 318h85s14-38 17-46h104c2 11 10 46 10 46h75zm-99 201c7-18 32-86 32-86-1 1 7-18 11-29l5 26s15 75 19 89zM285 6l-79 213-9-43C182 126 137 73 88 46l73 271h86L375 6z" fill="#2566af"/>
+          <path d="M139 6H8L7 12c102 26 169 89 197 164L175 31c-5-19-19-24-36-25" fill="#e6a540"/>
+        </svg>
+      </div>
+
+      <!-- logo GIRO X -->
+      <div class="marca">
+        <svg class="logo-giro" width="98" height="80" viewBox="0 0 128 104" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- órbita / swoosh -->
+          <g transform="rotate(-22 64 52)">
+            <ellipse cx="64" cy="52" rx="58" ry="31" fill="none" stroke="#2056c9" stroke-width="9" stroke-linecap="round" stroke-dasharray="142 96"/>
+            <ellipse cx="64" cy="52" rx="45" ry="22" fill="none" stroke="#7aa6e6" stroke-width="5" stroke-linecap="round" stroke-dasharray="96 84"/>
+          </g>
+          <!-- X: lâmina azul (\) e lâmina vermelha (/) com seta -->
+          <line x1="35" y1="24" x2="93" y2="78" stroke="#15307e" stroke-width="14" stroke-linecap="round"/>
+          <line x1="35" y1="78" x2="88" y2="30" stroke="#e32219" stroke-width="14" stroke-linecap="round"/>
+          <path d="M101 16 L82 23 L92 37 Z" fill="#e32219"/>
+        </svg>
+        <div class="marca-textos">
+          <h1 class="fonte-logo"><span class="t-giro">GIRO</span><span class="t-x">X</span></h1>
+          <div class="slogan">Soluções que cabem no seu bolso</div>
+        </div>
+      </div>
+
+      <!-- Mastercard -->
+      <div class="cartao-icone" title="Aceitamos Mastercard" aria-label="Mastercard">
+        <svg width="58" height="36" viewBox="0 0 120 74" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <circle cx="44" cy="32" r="28" fill="#eb001b"/>
+          <circle cx="76" cy="32" r="28" fill="#f79e1b"/>
+          <path d="M60 10.7a28 28 0 010 42.6 28 28 0 010-42.6z" fill="#ff5f00"/>
+          <text x="60" y="71" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-style="italic" font-weight="bold" fill="#27497c">MasterCard</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="faixa-titulo">
+      <h2 class="fonte-titulo">EMPRÉSTIMO NO CARTÃO</h2>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="pagina">
+    <div class="grade">
+      <!-- ===== coluna: calculadora ===== -->
+      <section class="card" aria-label="Calculadora de empréstimo">
+        <h3 class="fonte-titulo"><span class="ponto"></span>Simule seu empréstimo</h3>
+
+        <label for="valor">Quanto você precisa?</label>
+        <div class="campo-valor">
+          <button type="button" class="passo" id="menos" aria-label="Diminuir valor">−</button>
+          <span class="prefixo">R$</span>
+          <input id="valor" type="text" inputmode="numeric" value="1.000" aria-label="Valor do empréstimo em reais">
+          <button type="button" class="passo" id="mais" aria-label="Aumentar valor">+</button>
+        </div>
+        <input id="faixa" type="range" min="400" max="25000" step="100" value="1000" aria-label="Ajustar valor do empréstimo">
+        <div class="faixa-limites"><span>R$ 400</span><span>R$ 25.000</span></div>
+
+        <div class="parcelas-grupo">
+          <label for="parcelas">Em quantas parcelas?</label>
+          <select id="parcelas" class="seletor-parcelas" aria-label="Número de parcelas"></select>
+        </div>
+      </section>
+
+      <!-- ===== coluna: resultado ===== -->
+      <section class="resultado" aria-label="Resultado da simulação" aria-live="polite">
+        <div class="rotulo">Você paga</div>
+        <div class="parcela-grande" id="resParcela"><span class="x">12x</span>R$ 97,25</div>
+
+        <div class="linhas-resultado">
+          <div class="linha-res"><span>Valor liberado</span><strong id="resValor">R$ 1.000,00</strong></div>
+          <div class="linha-res"><span>Total a pagar</span><strong id="resTotal">R$ 1.167,00</strong></div>
+          <div class="linha-res"><span>Custo do empréstimo (juros)</span><strong id="resJuros">R$ 167,00</strong></div>
+          <div class="linha-res"><span>Acréscimo sobre o valor</span><strong id="resTaxa">16,7%</strong></div>
+        </div>
+
+        <a class="btn-whats" id="btnWhats" href="#" target="_blank" rel="noopener">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.66 15L2 22l5.16-1.32A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.28-1.16l-.3-.18-3.06.78.8-2.98-.2-.3A8.2 8.2 0 1112 20.2zm4.7-6.16c-.26-.13-1.52-.75-1.76-.84-.24-.09-.41-.13-.58.13s-.67.84-.82 1.01c-.15.17-.3.2-.56.07a6.7 6.7 0 01-1.97-1.22 7.4 7.4 0 01-1.36-1.7c-.14-.25 0-.38.11-.5.12-.12.26-.3.39-.45.13-.15.17-.26.26-.43.09-.17.04-.32-.02-.45-.07-.13-.58-1.4-.8-1.92-.2-.5-.42-.43-.58-.44h-.5c-.17 0-.45.06-.68.32-.24.25-.9.88-.9 2.15 0 1.27.92 2.5 1.05 2.67.13.17 1.82 2.78 4.4 3.9.62.27 1.1.43 1.47.55.62.2 1.18.17 1.62.1.5-.07 1.52-.62 1.74-1.22.21-.6.21-1.12.15-1.22-.06-.1-.24-.17-.5-.3z"/></svg>
+          Contratar pelo WhatsApp
+        </a>
+        <p class="nota-resultado">Atendimento em Porto Seguro, Eunápolis e Teixeira de Freitas.</p>
+      </section>
+    </div>
+
+    <!-- ===== tabela da promoção ===== -->
+    <section class="secao-tabela" aria-label="Tabela de valores da promoção">
+      <div class="tabela-wrap">
+        <table id="tabelaPromo">
+          <thead>
+            <tr><th>Valor</th><th>Parcelas</th><th>Total</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="pagina">
+    <div class="rodape-grade">
+      <div class="loja loja-principal">
+        <h4>PORTO SEGURO - BA</h4>
+        <p>Av. Getúlio Vargas, nº 203, Centro — 1º andar, Sala 03<br>Em frente ao Banco Itaú</p>
+        <a href="https://wa.me/5573998677630" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.66 15L2 22l5.16-1.32A10 10 0 1012 2z"/></svg>
+          WhatsApp: (73) 99867-7630
+        </a>
+      </div>
+      <div class="lojas-secundarias">
+        <div class="loja">
+          <h4>EUNÁPOLIS - BA</h4>
+          <a href="https://wa.me/5573998361105" target="_blank" rel="noopener">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.66 15L2 22l5.16-1.32A10 10 0 1012 2z"/></svg>
+            WhatsApp: (73) 99836-1105
+          </a>
+        </div>
+        <div class="loja">
+          <h4>TEIXEIRA DE FREITAS - BA</h4>
+          <a href="https://wa.me/5573998061574" target="_blank" rel="noopener">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.66 15L2 22l5.16-1.32A10 10 0 1012 2z"/></svg>
+            WhatsApp: (73) 99806-1574
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rodape-base">
+      <div class="mini-marca"><span class="t-giro">GIRO</span><span class="t-x">X</span><small>Soluções que cabem no seu bolso</small></div>
+      <div class="rodape-bandeiras">
+        <div class="cartao-icone" aria-label="VISA">
+          <svg width="46" height="16" viewBox="0 0 1000 324" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M433 318h-81L403 6h81zM726 14a200 200 0 00-72-13c-80 0-136 42-137 103-1 45 40 70 71 85s42 25 42 38c0 21-25 30-48 30a160 160 0 01-76-17l-10-5-11 66c19 8 53 16 89 16 85 0 140-41 141-106 0-36-21-63-68-85-28-15-46-24-46-39 0-13 15-27 47-27a143 143 0 0162 12l7 4zM833 6h-62c-19 0-34 5-42 25L609 318h85s14-38 17-46h104c2 11 10 46 10 46h75zm-99 201c7-18 32-86 32-86-1 1 7-18 11-29l5 26s15 75 19 89zM285 6l-79 213-9-43C182 126 137 73 88 46l73 271h86L375 6z" fill="#2566af"/>
+            <path d="M139 6H8L7 12c102 26 169 89 197 164L175 31c-5-19-19-24-36-25" fill="#e6a540"/>
+          </svg>
+        </div>
+        <div class="cartao-icone" aria-label="Mastercard">
+          <svg width="42" height="26" viewBox="0 0 120 74" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="44" cy="37" r="30" fill="#eb001b"/>
+            <circle cx="76" cy="37" r="30" fill="#f79e1b"/>
+            <path d="M60 14.2a30 30 0 010 45.6 30 30 0 010-45.6z" fill="#ff5f00"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // fator total por número de parcelas.
+  // Do panfleto: 6x → ×1,147 (R$400 → R$458,80) e 12x → ×1,167 (R$1.000 → R$1.167).
+  // As demais parcelas foram interpoladas entre esses dois pontos —
+  // ajuste aqui caso as taxas reais sejam outras.
+  const FATORES = {
+    1:  1.1303,
+    2:  1.1337,
+    3:  1.1370,
+    4:  1.1403,
+    5:  1.1437,
+    6:  1.1470,  // panfleto: acréscimo de 14,7%
+    7:  1.1503,
+    8:  1.1537,
+    9:  1.1570,
+    10: 1.1603,
+    11: 1.1637,
+    12: 1.1670   // panfleto: acréscimo de 16,7%
+  };
+
+  // valores da tabela GIRO X (panfleto): 400/500/700 em 6x; demais em 12x
+  const TABELA = [
+    { valor: 400,   parcelas: 6  },
+    { valor: 500,   parcelas: 6  },
+    { valor: 700,   parcelas: 6  },
+    { valor: 1000,  parcelas: 12 },
+    { valor: 1500,  parcelas: 12 },
+    { valor: 2000,  parcelas: 12 },
+    { valor: 3000,  parcelas: 12 },
+    { valor: 5000,  parcelas: 12 },
+    { valor: 10000, parcelas: 12 },
+    { valor: 12000, parcelas: 12 },
+    { valor: 13000, parcelas: 12 },
+    { valor: 17000, parcelas: 12 },
+    { valor: 20000, parcelas: 12 },
+    { valor: 23000, parcelas: 12 },
+    { valor: 25000, parcelas: 12 }
+  ];
+
+  const fmtBRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+  const fmtInt = new Intl.NumberFormat('pt-BR');
+
+  const elValor   = document.getElementById('valor');
+  const elFaixa   = document.getElementById('faixa');
+  const elParcelas= document.getElementById('parcelas');
+  const elMenos   = document.getElementById('menos');
+  const elMais    = document.getElementById('mais');
+  const resParcela= document.getElementById('resParcela');
+  const resValor  = document.getElementById('resValor');
+  const resTotal  = document.getElementById('resTotal');
+  const resJuros  = document.getElementById('resJuros');
+  const resTaxa   = document.getElementById('resTaxa');
+  const btnWhats  = document.getElementById('btnWhats');
+
+  const VALOR_MIN = 400, VALOR_MAX = 25000, PASSO = 100;
+  let valorAtual = 1000;
+  let parcelasAtual = 12;
+
+  function calcular(valor, n) {
+    const fator = FATORES[n];
+    const total = valor * fator;
+    return {
+      total,
+      parcela: total / n,
+      juros: total - valor,
+      taxa: (fator - 1) * 100
+    };
+  }
+
+  function atualizar() {
+    const r = calcular(valorAtual, parcelasAtual);
+    resParcela.innerHTML = '<span class="x">' + parcelasAtual + 'x</span>' + fmtBRL.format(r.parcela);
+    resValor.textContent = fmtBRL.format(valorAtual);
+    resTotal.textContent = fmtBRL.format(r.total);
+    resJuros.textContent = fmtBRL.format(r.juros);
+    resTaxa.textContent  = r.taxa.toFixed(1).replace('.', ',') + '%';
+
+    elParcelas.value = String(parcelasAtual);
+
+    elFaixa.value = Math.min(Math.max(valorAtual, elFaixa.min), elFaixa.max);
+    elMenos.disabled = valorAtual <= VALOR_MIN;
+    elMais.disabled  = valorAtual >= VALOR_MAX;
+
+    const msg ='Olá! Vi o site da GIRO X e quero contratar um empréstimo no cartão de '
+      + fmtBRL.format(valorAtual) + ' em ' + parcelasAtual + 'x de ' + fmtBRL.format(r.parcela)
+      + ' (total ' + fmtBRL.format(r.total) + ').';
+    btnWhats.href = 'https://wa.me/5573998677630?text=' + encodeURIComponent(msg);
+  }
+
+  function definirValor(v, origem) {
+    valorAtual = Math.max(VALOR_MIN, Math.min(VALOR_MAX, Math.round(v)));
+    if (origem !== 'campo') elValor.value = fmtInt.format(valorAtual);
+    atualizar();
+  }
+
+  function definirParcelas(n) {
+    parcelasAtual = n;
+    atualizar();
+  }
+
+  // campo de texto com máscara simples de milhar
+  elValor.addEventListener('input', () => {
+    const digitos = elValor.value.replace(/\D/g, '');
+    const v = Number(digitos || 0);
+    elValor.value = digitos ? fmtInt.format(v) : '';
+    if (v >= 100) definirValor(v, 'campo');
+  });
+  elValor.addEventListener('blur', () => {
+    elValor.value = fmtInt.format(valorAtual);
+  });
+
+  elFaixa.addEventListener('input', () => definirValor(Number(elFaixa.value)));
+
+  // botões + / − : ajustam o valor de PASSO em PASSO, ancorados em múltiplos de PASSO
+  function passar(dir) {
+    const base = Math.round(valorAtual / PASSO) * PASSO;
+    definirValor(base + dir * PASSO);
+  }
+  elMenos.addEventListener('click', () => passar(-1));
+  elMais.addEventListener('click', () => passar(1));
+
+  // mantém o card da calculadora com a mesma altura do card de resultado
+  // (lado a lado o grid já estica; empilhado, igualamos via min-height)
+  const cardCalc = document.querySelector('.grade .card');
+  const cardRes  = document.querySelector('.grade .resultado');
+  function igualarCards() {
+    cardCalc.style.minHeight = '';
+    if (window.matchMedia('(max-width:880px)').matches) {
+      cardCalc.style.minHeight = cardRes.offsetHeight + 'px';
+    }
+  }
+  window.addEventListener('resize', igualarCards);
+  window.addEventListener('load', igualarCards);
+  igualarCards();
+
+  // menu de parcelas: 1x a 12x, com o acréscimo de cada opção
+  Object.keys(FATORES).forEach(n => {
+    const opt = document.createElement('option');
+    const taxa = ((FATORES[n] - 1) * 100).toFixed(1).replace('.', ',');
+    opt.value = n;
+    opt.textContent = n + 'x — acréscimo de ' + taxa + '%';
+    elParcelas.appendChild(opt);
+  });
+  elParcelas.value = String(parcelasAtual);
+  elParcelas.addEventListener('change', () => definirParcelas(Number(elParcelas.value)));
+
+  // tabela da promoção (mesmos valores do panfleto)
+  const tbody = document.querySelector('#tabelaPromo tbody');
+  TABELA.forEach(item => {
+    const r = calcular(item.valor, item.parcelas);
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>R$ ' + fmtInt.format(item.valor) + '</td>' +
+      '<td><span class="par"><span class="vezes-tag">' + String(item.parcelas).padStart(2, '0') + 'X</span><span class="par-valor">' + fmtBRL.format(r.parcela) + '</span></span></td>' +
+      '<td>' + fmtBRL.format(r.total) + '</td>';
+    tr.addEventListener('click', () => {
+      definirParcelas(item.parcelas);
+      definirValor(item.valor);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    tbody.appendChild(tr);
+  });
+
+  atualizar();
+</script>
+</body>
+</html>
