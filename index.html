@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>GIRO X — Empréstimo no Cartão</title>
 <meta name="description" content="GIRO X — soluções que cabem no seu bolso. Simule seu empréstimo no cartão em 6x ou 12x. Porto Seguro, Eunápolis e Teixeira de Freitas - BA.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,13 +23,17 @@
     --sombra:0 10px 30px rgba(21,48,126,.12);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;overflow-x:hidden}
   body{
     font-family:'Archivo',Arial,Helvetica,sans-serif;
     background:var(--papel);
     color:var(--texto);
     min-height:100vh;
+    width:100%;
     overflow-x:hidden;
+    overscroll-behavior-x:none;
+    touch-action:manipulation;      /* sem duplo-toque de zoom; mantém rolagem e toques */
+    -webkit-text-size-adjust:100%;  /* iOS não reescala o texto */
   }
   .fonte-titulo{font-family:'Archivo Black','Arial Black',Arial,sans-serif}
 
@@ -302,7 +306,7 @@
     .passo{width:40px;height:40px;font-size:1.45rem}
     input[type=range]{margin:10px 0 4px}
     .faixa-limites{font-size:.72rem}
-    .seletor-parcelas{padding:11px 38px 11px 14px;font-size:.98rem}
+    .seletor-parcelas{padding:11px 38px 11px 14px;font-size:1rem}
     /* card resultado compacto */
     .parcela-grande{font-size:1.9rem;margin:2px 0}
     .resultado .linhas-resultado{margin-top:10px;margin-bottom:12px;gap:5px}
