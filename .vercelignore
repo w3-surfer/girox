@@ -1,0 +1,4 @@
+# config local de dev / caminhos absolutos da máquina
+.claude
+.gitignore
+.DS_Store
