@@ -65,10 +65,15 @@
     flex:none;
   }
   @media (max-width:680px){
-    .topo{flex-direction:column}
-    .bandeiras{flex-direction:row}
-    .marca{flex-direction:column;text-align:center}
-    .marca-textos{text-align:center}
+    /* mantém em linha: VISA | (logo + GIROX) | Mastercard */
+    header{padding:18px 0 8px}
+    .topo{gap:8px}
+    .marca{gap:8px}
+    .topo .cartao-icone{width:52px;height:34px;border-radius:7px}
+    .topo .cartao-icone svg{width:36px;height:auto}
+    .logo-giro{width:46px;height:auto}
+    .fonte-logo{font-size:1.5rem;letter-spacing:-.5px}
+    .slogan{font-size:.48rem;letter-spacing:.2px;margin-top:1px}
   }
 
   /* ===== faixa do título ===== */
@@ -195,7 +200,7 @@
   .linha-res strong{font-size:1.05rem;white-space:nowrap}
   /* destaque dos valores: liberado em verde (WhatsApp), total a pagar em vermelho */
   .resultado #resValor{color:#25d366}
-  .resultado #resTotal{color:var(--vermelho)}
+  .resultado #resJuros{color:var(--vermelho)}
   .btn-whats{
     margin-top:24px;
     display:flex;align-items:center;justify-content:center;gap:10px;
@@ -231,6 +236,15 @@
   .par{display:inline-flex;align-items:baseline;gap:8px}
   .par .vezes-tag{color:var(--azul);font-size:.78rem;font-weight:900;width:2.6em;text-align:right;flex:none}
   .par .par-valor{width:7.2em;text-align:left;flex:none}
+  /* no mobile a tabela cabe sem rolar: fonte/espaçamento menores e larguras flexíveis */
+  @media (max-width:680px){
+    table{min-width:0}
+    thead th{padding:10px 4px;font-size:.58rem;letter-spacing:.2px}
+    tbody td{padding:9px 4px;font-size:.76rem}
+    .par{gap:4px}
+    .par .vezes-tag{width:auto;font-size:.64rem}
+    .par .par-valor{width:auto}
+  }
 
   /* ===== rodapé ===== */
   footer{
