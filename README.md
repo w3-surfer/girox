@@ -24,9 +24,3 @@ As parcelas intermediárias (1x–5x, 7x–11x) são interpoladas entre esses do
 python3 -m http.server 4173 --directory .
 # abra http://localhost:4173
 ```
-
-## Unidades
-
-- **Porto Seguro – BA** — Av. Getúlio Vargas, nº 203, Centro, 1º andar, Sala 03 (em frente ao Banco Itaú) — WhatsApp (73) 99867-7630
-- **Eunápolis – BA** — WhatsApp (73) 99836-1105
-- **Teixeira de Freitas – BA** — WhatsApp (73) 99806-1574
